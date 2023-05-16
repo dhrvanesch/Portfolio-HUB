@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="css/style.css">
+  <title>ASH Graphics</title>
+</head>
+<!--Light-theme is base, Dark-modus can be toggled in the navigation bar-->
+
+<body class="light-theme w100 m0">
+
+  <header>
+
+    <div class="header-background light-theme w100 pfixed">
+      <a href="index.html">
+        <img src="images/icons/logo.svg" class="logo1" alt="200x20">
+        <img src="images/icons/logo2.svg" class="logo2" alt="20x20">
+      </a>
+      <nav class="main-nav">
+        <a class="toggle-button dflex pfixed">
+          <span class="bar1 bars w100"></span>
+          <span class="bar2 bars w100"></span>
+          <span class="bar3 bars w100"></span>
+        </a>
+        <div class="nav-links w100 pfixed">
+          <ul class="dflex m0 p0">
+            <li> <a href="">Home</a>
+            </li>
+            <li> <a href="projects.html">Blog</a>
+            </li>
+            <li> <a href="contact.html">Contact</a>
+            </li>
+            <li> <img src="images/icons/darkmode.svg" class="darkmode" alt="20x20">
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <div class="contact contact-header light-theme p0">
+    <h1>Web-Developer & Graphic Designer</h1>
+  </div>
+  <div class="textarea dflex light-theme ">
+    <h4>Title</h4>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto commodi maiores libero nam iste accusamus possimus, voluptates voluptatem quo amet hic porro unde, ipsam at reprehenderit laudantium qui, id magni? Lorem ipsum dolor sit
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto commodi maiores libero nam iste accusamus possimus, voluptates voluptatem quo amet hic porro unde, ipsam at reprehenderit laudantium qui, id magni? Lorem ipsum dolor sit
+    </p>
+</div>  
+    <div class="gridbox-blog">
+      <div class="image-box light-theme">
+        <img class="images w100" alt="800x1067" src="./images/character-phone.jpg"> 
+      </div>
+    <div class="image-box light-theme">
+      <img class="images w100" alt="800x1067" src="./images/character-phone.jpg"> 
+    </div>
+    <div class="image-box light-theme">
+      <img class="images w100" alt="800x1067" src="./images/character-phone.jpg"> 
+    </div>
+    <div class="textarea dflex light-theme ">
+      <h4>Declarations</h4>
+      <pre>
+        <code>        
+          #include <Servo.h>
+          #include <DS3231.h>
+            
+          DS3231  rtc(SDA, SCL);
+          Servo myservo;  
+            
+          // Declare Pin's
+          const int buttonPin = 2;    
+             
+          // Declare state of Button
+            
+          int buttonState;            
+          int lastButtonState = HIGH;  
+            
+          // Declare gate variables
+          int gateState = 0;
+          int lastgateState = 1;
+            
+          int seconds = 0;
+            
+          // Init a Time-data structure
+          Time  t;
+            
+          // Declare Time Variables
+          int Hour;
+          int Min;
+          int Sec;
+    
+          unsigned long lastDebounceTime = 0;  
+          unsigned long debounceDelay = 50;    
+      </code>
+    </pre>
+</div>
+<div class="textarea dflex light-theme ">
+  <h4>Setup</h4>
+  <pre>
+    <code>        
+      void setup() {
+  
+      // Setup Serial connection
+      Serial.begin(9600);
+        
+      // Initialize the rtc object
+           rtc.begin();
+
+      //attaches the servo on pin 9 to the servo object
+      myservo.attach(9); 
+     
+      pinMode(buttonPin, INPUT);
+      
+      // Uncomment the next line if you are using an Arduino Leonardo
+      //while (!Serial) {}
+       
+      // The following lines can be uncommented to set the date and time
+      //rtc.setDOW(SUNDAY);     // Set Day-of-Week 
+      //rtc.setTime(17, 26, 50);     // Set the time to 12:00:00 (24hr format)
+      //rtc.setDate(11,15 , 2020);   // Set the date 
+     }
+    </code>
+  </pre>
+</div>
+<div class="textarea dflex light-theme ">
+  <h4>Loop</h4>
+  <pre>
+    <code>        
+      void loop() {
+
+      // Get data from the DS3231
+      t = rtc.getTime();
+      
+      // Split time into segments
+      Hour = t.hour;
+      Min = t.min;
+      Sec = t.sec;
+    
+      // Serial.print(Hour, DEC);
+      //Serial.print(":");
+      //Serial.print(Min, DEC);
+      //Serial.print(":");
+      //Serial.print(Sec, DEC);
+
+      // read the state of the switch into a local variable:
+      int reading = digitalRead(buttonPin);
+
+      // If the switch changed, due to noise or pressing:
+      if (reading != lastButtonState) {
+      // reset the debouncing timer
+      lastDebounceTime = millis();
+      }
+    
+      if ((millis() - lastDebounceTime) > debounceDelay) {
+      // delay, so take it as the actual current state:
+    
+      // if the button state has changed:
+      if (reading != buttonState) {
+          buttonState = reading;
+    
+      // only toggle the LED if the new button state is HIGH
+      if (buttonState == HIGH) {
+            
+      if(gateState == 1){ 
+        gateState = 0;
+        lastgateState = 1;
+      }else {
+      gateState = 1;
+      lastgateState = 0;
+
+      }
+      }   
+      if(buttonState == HIGH && gateState == 1){
+      // Serial.println("Gate is closing");
+      myservo.write(0);
+      delay(3000);
+      myservo.write(90);
+      //  Serial.println("Gate is now shut");
+    
+      }else if(buttonState == HIGH && gateState == 0){
+      // Serial.println("Gate is opening");
+      myservo.write(180);
+      delay(3000);
+      myservo.write(90);
+      // Serial.println("Gate is now open");   
+      } 
+      }  
+      }
+    
+      //Opening Gate at  given time, only if de gate is not open already.
+      if(Hour == 17 && Min == 32 && Sec == 10 && gateState == 0 ){
+        
+      myservo.write(0);
+      delay(3000);
+      myservo.write(90);
+      delay(300);
+      gateState = 1;
+      Serial.println("Gate is now open");
+      }
+    
+      //Closing Gate at  given time, only if de gate is not closed already.
+      if(Hour == 19 && Min == 33 && Sec == 10 && gateState == 1 ){
+        
+      myservo.write(180);
+      delay(3000);
+      myservo.write(90);
+      delay(300);
+      gateState = 0;
+      Serial.println("Gate is now shut");
+      }
+      }
+    </code>
+  </pre>
+</div>
+  </div>
+    <footer class="footer"></footer>
+
+    <script src="js/app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+  </body>
+  
+  </html>
